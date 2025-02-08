@@ -5,6 +5,9 @@ import customtkinter as ck
 from openpyxl import load_workbook, Workbook, styles
 import os 
 
+from qrcodem.generate import employee_qr
+
+
 base_path = os.path.dirname(__file__)
 
 
@@ -70,4 +73,37 @@ class EmpployeeFrame(ck.CTkFrame):
         # self.pack()
 
     
+class GenerateId(ck.CTkFrame):
+    count = 0
+    def __init__(self, master):
+        GenerateId.count += 1
+        super().__init__(master, width=400, height=400)
+        self.pack(fill=tk.BOTH,)
+        # self.pack()
+        self.firstname = tk.StringVar()
+        self.lastname = tk.StringVar()
+        self.id_number = tk.StringVar()     
+        self.create_widgets()
+
+
     
+    def create_widgets(self):
+        self.firstname_label = ck.CTkLabel(self, text="First Name")
+        self.firstname_label.pack()
+
+        self.firstname_entry = ck.CTkEntry(self, textvariable=self.firstname)
+        self.firstname_entry.pack()
+
+        self.lastname_label = ck.CTkLabel(self, text="Last Name")
+        self.lastname_label.pack()
+
+        self.lastname_entry = ck.CTkEntry(self, textvariable=self.lastname)
+        self.lastname_entry.pack()
+
+        self.create = ck.CTkButton(self, text="Create ID", command=self.create_id)
+        self.create.pack()
+
+
+    def create_id(self):
+            print(self.firstname.get() + self.lastname.get())
+            employee_qr(name=self.firstname.get() + self.lastname.get(),  id_number=GenerateId.count)
